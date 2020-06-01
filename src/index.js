@@ -22,6 +22,10 @@ io.on('connection', (socket) => {
         io.emit('msg', userMsg) // sends to every connections(browsers)
     })
 
+    socket.on('sendLocation', (userLocation) => {
+        io.emit('msg', `Location: ${userLocation}`)
+    })
+
     socket.on('disconnect', () => {
         io.emit('msg', 'A user has left!')
     })
