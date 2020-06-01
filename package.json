@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js -e js,hbs,env",
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js -e js,html,env",
     "start": "node src/index.js"
   },
   "author": "Arpit Dalal",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "env-cmd": "^10.1.0",
