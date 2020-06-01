@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('sendLocation', (userLocation, callback) => {
-        io.emit('msg', `Location: ${userLocation}`)
+        io.emit('locationMsg', userLocation)
         callback()
     })
 
