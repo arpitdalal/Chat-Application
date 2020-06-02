@@ -4,27 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App</title>
+    <link rel="icon" href="img/favicon.png">
+    <link rel="stylesheet" href="css/styles.min.css">
 </head>
 <body>
-    <h1>Welcome!</h1>
 
-    <div id="messages"></div>
+    <div class="chat">
+        <div class="chat__sidebar">
 
-    <form id="chatForm">
-        <input type="text" name="userMsg" placeholder="your message..." autofocus>
-        <button id="sendBtn">Send</button>
-    </form>
-    <button id="sendLocation">Share location</button>
+        </div>
+        <div class="chat__main">
+            <div id="messages" class="chat__messages"></div>
+
+            <div class="compose">
+                <form id="chatForm">
+                    <input type="text" name="userMsg" placeholder="your message..." autofocus>
+                    <button id="sendBtn">Send</button>
+                </form>    
+                <button id="sendLocation">Share location</button>
+            </div>
+        </div>
+    </div>
 
     <script id="message-template" type="text/html">
-        <div>
-            <p>{{createdAt}} - {{msg}}</p>
+        <div class="message">
+            <p>
+                <span class="message__name">John Doe</span>
+                <span class="message__meta">{{createdAt}}</span>
+            </p>
+            <p>{{msg}}</p>
         </div>
     </script>
 
     <script id="url-template" type="text/html">
-        <div>
-            <p>{{createdAt}} - <a href="{{url}}" target="_blank">My current location</a></p>
+        <div>            
+            <p>
+                <span class="message__name">John Doe</span>
+                <span class="message__meta">{{createdAt}}</span>
+            </p>
+            <p><a href="{{url}}" target="_blank">My current location</a></p>
         </div>
     </script>
 
