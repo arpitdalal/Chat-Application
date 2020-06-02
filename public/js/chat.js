@@ -13,21 +13,41 @@ const urlTemplate = document.querySelector('#url-template').innerHTML
 
 // Options
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
-console.log(username + ' ' + room)
+
 socket.on('msg', (msg) => {
-    const html = Mustache.render(msgTemplate, {
-        msg: msg.text,
-        createdAt: moment(msg.createdAt).format('h:mm a')
-    })
-    $msg.insertAdjacentHTML('beforeend', html)
+    if (msg.user.username === username.trim().toLowerCase()){
+        const html = Mustache.render(msgTemplate, {
+            username: 'Me',
+            msg: msg.text,
+            createdAt: moment(msg.createdAt).format('h:mm a')
+        })
+        $msg.insertAdjacentHTML('beforeend', html)
+    } else {
+        const html = Mustache.render(msgTemplate, {
+            username: msg.user.username,
+            msg: msg.text,
+            createdAt: moment(msg.createdAt).format('h:mm a')
+        })
+        $msg.insertAdjacentHTML('beforeend', html)
+    }
 })
 
-socket.on('locationMsg', (url) => {    
-    const html = Mustache.render(urlTemplate, {
-        url: url.link,
-        createdAt: moment(url.createdAt).format('h:mm a')
-    })
-    $msg.insertAdjacentHTML('beforeend', html)
+socket.on('locationMsg', (url) => {
+    if (url.user.username === username.trim().toLowerCase()){
+        const html = Mustache.render(urlTemplate, {
+            username: 'Me',
+            url: url.link,
+            createdAt: moment(url.createdAt).format('h:mm a')
+        })
+        $msg.insertAdjacentHTML('beforeend', html)
+    } else{
+        const html = Mustache.render(urlTemplate, {
+            username: url.user.username,
+            url: url.link,
+            createdAt: moment(url.createdAt).format('h:mm a')
+        })
+        $msg.insertAdjacentHTML('beforeend', html)
+    }
 })
 
 $form.addEventListener('submit', (e) => {

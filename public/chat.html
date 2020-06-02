@@ -17,9 +17,9 @@
 
             <div class="compose">
                 <form id="chatForm">
-                    <input type="text" name="userMsg" placeholder="your message..." autofocus>
+                    <input type="text" name="userMsg" placeholder="your message..." autofocus required autocomplete="off">
                     <button id="sendBtn">Send</button>
-                </form>    
+                </form>
                 <button id="sendLocation">Share location</button>
             </div>
         </div>
@@ -28,7 +28,7 @@
     <script id="message-template" type="text/html">
         <div class="message">
             <p>
-                <span class="message__name">John Doe</span>
+                <span class="message__name">{{username}}</span>
                 <span class="message__meta">{{createdAt}}</span>
             </p>
             <p>{{msg}}</p>
@@ -36,9 +36,9 @@
     </script>
 
     <script id="url-template" type="text/html">
-        <div>            
+        <div class="message">            
             <p>
-                <span class="message__name">John Doe</span>
+                <span class="message__name">{{username}}</span>
                 <span class="message__meta">{{createdAt}}</span>
             </p>
             <p><a href="{{url}}" target="_blank">My current location</a></p>

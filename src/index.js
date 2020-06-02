@@ -32,10 +32,10 @@ io.on('connection', (socket) => {
             .join(user.room)
 
         socket
-            .emit('msg', generateMsg(`Welcome ${user.username}!`)) //sends to that particular user
+            .emit('msg', generateMsg('Admin', `Welcome ${user.username}!`)) //sends to that particular user
         socket.broadcast
             .to(user.room)
-            .emit('msg', generateMsg(`${user.username} has joined!`)) //sends message to everyone else the new user in that room only
+            .emit('msg', generateMsg('Admin', `${user.username} has joined!`)) //sends message to everyone else the new user in that room only
         callback()    
     })
 
@@ -50,7 +50,7 @@ io.on('connection', (socket) => {
         
         io
             .to(user.room)
-            .emit('msg', generateMsg(userMsg)) // sends to every user
+            .emit('msg', generateMsg(user, userMsg)) // sends to every user
         callback()
     })
 
@@ -59,7 +59,7 @@ io.on('connection', (socket) => {
 
         io
             .to(user.room)
-            .emit('locationMsg', generateLocationMsg(coords))
+            .emit('locationMsg', generateLocationMsg(user, coords))
         callback()
     })
 
@@ -69,7 +69,7 @@ io.on('connection', (socket) => {
         if (user) {
             io
                 .to(user.room)
-                .emit('msg', generateMsg(`${user.username} has left!`))
+                .emit('msg', generateMsg('Admin', `${user.username} has left!`))
         }
     })
 })
