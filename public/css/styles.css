@@ -94,7 +94,8 @@ button:disabled {
     color: white;
     background: #333744;
     width: 225px;
-    overflow-y: scroll
+    overflow-y: scroll;
+    flex-shrink: 0;
 }
 
 /* Chat styles */
@@ -110,6 +111,7 @@ button:disabled {
     flex-grow: 1;
     padding: 24px 24px 0 24px;
     overflow-y: scroll;
+    word-break: break-all;
 }
 
 /* Message Styles */
@@ -180,4 +182,14 @@ button:disabled {
     list-style-type: none;
     font-weight: 300;
     padding: 12px 24px 0 24px;
+}
+
+.leaveBtn {
+    background: rgb(134, 0, 0);
+    color: white;
+    width: 100%;
+}
+
+.leaveBtn:hover{
+    background: rgb(126, 0, 0);
 }

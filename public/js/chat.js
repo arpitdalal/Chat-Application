@@ -6,6 +6,7 @@ const $txtInput = $form.querySelector('input')
 const $submitBtn = $form.querySelector('button')
 const $locationBtn = document.querySelector('#sendLocation')
 const $msg = document.querySelector('#messages')
+const $leaveBtn = document.querySelector('#leaveBtn')
 
 // Templates
 const msgTemplate = document.querySelector('#message-template').innerHTML
@@ -13,6 +14,13 @@ const urlTemplate = document.querySelector('#url-template').innerHTML
 
 // Options
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
+
+socket.emit('join', {username, room}, (error) => {
+    if (error) {
+        alert(error)
+        location.href = '/'
+    }
+})
 
 socket.on('msg', (msg) => {
     if (msg.user.username === username.trim().toLowerCase()){
@@ -49,6 +57,10 @@ socket.on('locationMsg', (url) => {
         $msg.insertAdjacentHTML('beforeend', html)
     }
 })
+
+socket.on('disconnect', function () {
+    window.location = "/"
+});
 
 $form.addEventListener('submit', (e) => {
     e.preventDefault()
@@ -96,9 +108,6 @@ $locationBtn.addEventListener('click', () => {
     })
 })
 
-socket.emit('join', {username, room}, (error) => {
-    if (error) {
-        alert(error)
-        location.href = '/'
-    }
+$leaveBtn.addEventListener('click', () => {
+    socket.disconnect()
 })
