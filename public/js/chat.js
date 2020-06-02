@@ -13,14 +13,16 @@ const urlTemplate = document.querySelector('#url-template').innerHTML
 
 socket.on('msg', (msg) => {
     const html = Mustache.render(msgTemplate, {
-        msg
+        msg: msg.text,
+        createdAt: moment(msg.createdAt).format('h:mm a')
     })
     $msg.insertAdjacentHTML('beforeend', html)
 })
 
 socket.on('locationMsg', (url) => {    
     const html = Mustache.render(urlTemplate, {
-        url
+        url: url.link,
+        createdAt: moment(url.createdAt).format('h:mm a')
     })
     $msg.insertAdjacentHTML('beforeend', html)
 })
@@ -58,8 +60,11 @@ $locationBtn.addEventListener('click', () => {
     $txtInput.focus()
 
     navigator.geolocation.getCurrentPosition((position) => {
-        socket.emit('sendLocation', 
-            `https://google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`, 
+        console.log(position)
+        socket.emit('sendLocation', {
+                lat: position.coords.latitude,
+                long: position.coords.longitude
+            },
             () => {
                 console.log('Location shared!')
                 // enable location button

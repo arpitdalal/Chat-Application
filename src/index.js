@@ -3,6 +3,7 @@ const http = require('http')
 const express = require('express')
 const socketio = require('socket.io')
 const Filter = require('bad-words')
+const { generateMsg, generateLocationMsg } = require('./utils/messages')
 
 const app = express()
 const server = http.createServer(app)
@@ -16,8 +17,8 @@ app.use(express.static(publicDirectoryPath))
 io.on('connection', (socket) => {
     console.log('New WebSocket connection!')
     
-    socket.emit('msg', "Welcome User") //sends to that particular connection(browser)
-    socket.broadcast.emit('msg', 'A new user has joined!') //sends message to everyone else the new user
+    socket.emit('msg', generateMsg('Welcome user!')) //sends to that particular connection(browser)
+    socket.broadcast.emit('msg', generateMsg('A new user has joined!')) //sends message to everyone else the new user
 
     socket.on('sendMsg', (userMsg, callback) => {
         const filter = new Filter()
@@ -26,17 +27,17 @@ io.on('connection', (socket) => {
             return callback('Profanity is not allowed!')
         }
         
-        io.emit('msg', userMsg) // sends to every connections(browsers)
+        io.emit('msg', generateMsg(userMsg)) // sends to every connections(browsers)
         callback()
     })
 
-    socket.on('sendLocation', (userLocation, callback) => {
-        io.emit('locationMsg', userLocation)
+    socket.on('sendLocation', (coords, callback) => {
+        io.emit('locationMsg', generateLocationMsg(coords))
         callback()
     })
 
     socket.on('disconnect', () => {
-        io.emit('msg', 'A user has left!')
+        io.emit('msg', generateMsg('A user has left!'))
     })
 })
 
