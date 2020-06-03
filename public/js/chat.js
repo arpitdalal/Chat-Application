@@ -10,6 +10,7 @@ const $sidebar = document.querySelector('#sidebar')
 
 // Templates
 const msgTemplate = document.querySelector('#message-template').innerHTML
+const adminMsgTemplate = document.querySelector('#messageAdmin-template').innerHTML
 const urlTemplate = document.querySelector('#url-template').innerHTML
 const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML
 
@@ -24,36 +25,46 @@ socket.emit('join', {username, room}, (error) => {
 })
 
 socket.on('msg', (msg) => {
-    if (msg.user.username === username.trim().toLowerCase()){
+    if (msg.username === username.trim().toLowerCase()){
         const html = Mustache.render(msgTemplate, {
             username: 'Me',
             msg: msg.text,
-            createdAt: moment(msg.createdAt).format('h:mm a')
+            createdAt: moment(msg.createdAt).format('h:mm a'),
+            className: 'me'
+        })
+        $msg.insertAdjacentHTML('beforeend', html)
+    } else if (msg.username === 'Admin'){
+        const html = Mustache.render(adminMsgTemplate, {
+            msg: msg.text,
+            className: 'Admin'
         })
         $msg.insertAdjacentHTML('beforeend', html)
     } else {
         const html = Mustache.render(msgTemplate, {
-            username: msg.user.username,
+            username: msg.username,
             msg: msg.text,
-            createdAt: moment(msg.createdAt).format('h:mm a')
+            createdAt: moment(msg.createdAt).format('h:mm a'),
+            className: msg.username
         })
         $msg.insertAdjacentHTML('beforeend', html)
     }
 })
 
 socket.on('locationMsg', (url) => {
-    if (url.user.username === username.trim().toLowerCase()){
+    if (url.username === username.trim().toLowerCase()){
         const html = Mustache.render(urlTemplate, {
             username: 'Me',
             url: url.link,
-            createdAt: moment(url.createdAt).format('h:mm a')
+            createdAt: moment(url.createdAt).format('h:mm a'),
+            className: 'me'
         })
         $msg.insertAdjacentHTML('beforeend', html)
     } else{
         const html = Mustache.render(urlTemplate, {
-            username: url.user.username,
+            username: url.username,
             url: url.link,
-            createdAt: moment(url.createdAt).format('h:mm a')
+            createdAt: moment(url.createdAt).format('h:mm a'),
+            className: url.username
         })
         $msg.insertAdjacentHTML('beforeend', html)
     }
@@ -90,7 +101,6 @@ $form.addEventListener('submit', (e) => {
             if(error){
                 return alert(error)
             }
-            console.log('Message delivered!')
         })
 })
 
@@ -104,22 +114,17 @@ $locationBtn.addEventListener('click', () => {
     $txtInput.focus()
 
     navigator.geolocation.getCurrentPosition((position) => {
-        console.log(position)
         socket.emit('sendLocation', {
                 lat: position.coords.latitude,
                 long: position.coords.longitude
             },
             () => {
-                console.log('Location shared!')
                 // enable location button
                 $locationBtn.removeAttribute('disabled')
             })
     })
 })
 
-window.addEventListener('load', () => {
-    // not defining leaveBtn top as it wasn't populated before the call to roomData socket
-    document.querySelector('#leaveBtn').addEventListener('click', () => {
-        socket.disconnect()
-    })
+document.querySelector('#leaveBtn').addEventListener('click', () => {
+    socket.disconnect()
 })

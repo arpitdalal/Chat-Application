@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
         
         io
             .to(user.room)
-            .emit('msg', generateMsg(user, userMsg)) // sends to every user
+            .emit('msg', generateMsg(user.username, userMsg)) // sends to every user
         callback()
     })
 
@@ -64,7 +64,7 @@ io.on('connection', (socket) => {
 
         io
             .to(user.room)
-            .emit('locationMsg', generateLocationMsg(user, coords))
+            .emit('locationMsg', generateLocationMsg(user.username, coords))
         callback()
     })
 

@@ -9,7 +9,11 @@
 </head>
 <body>
     <div class="chat">
-        <div id="sidebar" class="chat__sidebar"></div>
+        <div class="chat__sidebar">
+            <div id="sidebar"></div>
+            <button id="leaveBtn" class="leaveBtn">Leave chat room</button>
+        </div>
+        
         <div class="chat__main">
             <div id="messages" class="chat__messages"></div>
 
@@ -24,18 +28,24 @@
     </div>
 
     <script id="message-template" type="text/html">
-        <div class="message">
-            <p>
+        <div class="message {{className}}">
+            <p class="message__data">
                 <span class="message__name">{{username}}</span>
                 <span class="message__meta">{{createdAt}}</span>
             </p>
             <p>{{msg}}</p>
         </div>
     </script>
+    
+    <script id="messageAdmin-template" type="text/html">
+        <div class="message {{className}}">
+            <p>{{msg}}</p>
+        </div>
+    </script>
 
     <script id="url-template" type="text/html">
-        <div class="message">            
-            <p>
+        <div class="message {{className}}">
+            <p class="message__data">
                 <span class="message__name">{{username}}</span>
                 <span class="message__meta">{{createdAt}}</span>
             </p>
@@ -51,7 +61,6 @@
                 <li>{{username}}</li>
             {{/users}}
         </ul>
-        <button id="leaveBtn" class="leaveBtn">Leave chat room</button>
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
@@ -59,5 +68,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/chat.js"></script>
+    <script>
+        document.querySelector('.me').parentElement.classList.add('messages-me')
+        document.querySelector('.Admin').parentElement.classList.add('messages-Admin')
+    </script>
 </body>
 </html>

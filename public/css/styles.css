@@ -118,7 +118,13 @@ button:disabled {
 /* Message Styles */
 
 .message {
-    margin-bottom: 16px;   
+    margin-bottom: 2%;
+    margin-left: 2%;
+    background-color: rgb(155, 117, 236);
+    padding: 2%;
+    width: 40%;
+    color: white;
+    border-radius: 16px 16px 16px 0;
 }
 
 .message__name {
@@ -127,13 +133,47 @@ button:disabled {
     margin-right: 8px;
 }
 
+.message__data::after {
+    content: '';
+    border-bottom: 1px solid rgb(199, 199, 199);
+    opacity: .3;
+    width: 80%;
+    margin-right: auto;
+    text-align: center;
+    display: block;
+    margin-bottom: 1%;
+    margin: 2% 0 5%;
+}
+
+.me .message__data::after {
+    width: 80%;
+    margin-left: auto;
+}
+
 .message__meta {
-    color: #777;
+    color: rgb(199, 199, 199);
     font-size: 14px;
 }
 
 .message a {
     color: #0070CC;
+}
+
+.me {
+    text-align: right;
+    background-color: rgb(155, 117, 236);
+    margin-left: auto;
+    margin-right: 2%;
+    border-radius: 16px 16px 0 16px;
+}
+
+.Admin {
+    width: 100%;
+    padding: .8%;
+    text-align: center;
+    background-color: #333744;
+    margin: 0 auto 2%;
+    border-radius: 16px;
 }
 
 /* Message Composition Styles */
@@ -208,6 +248,8 @@ button:disabled {
 .leaveBtn:hover{
     background: rgb(126, 0, 0);
 }
+
+/* Responsive styles */
 
 @media only screen and (max-width: 450px){
     .chat__sidebar{
