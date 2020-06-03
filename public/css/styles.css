@@ -90,10 +90,11 @@ button:disabled {
 }
 
 .chat__sidebar {
+    display: flex;
+    flex-direction: column;
     height: 100vh;
     color: white;
     background: #333744;
-    width: 225px;
     overflow-y: scroll;
     flex-shrink: 0;
 }
@@ -165,31 +166,69 @@ button:disabled {
 /* Chat Sidebar Styles */
 
 .room-title {
+    text-transform: uppercase;
+    text-align: center;
     font-weight: 400;
     font-size: 22px;
     background: #2c2f3a;
-    padding: 24px;   
+    padding: 24px;
+    margin-bottom: 5px;
 }
 
 .list-title {
+    text-transform: uppercase;
+    background: #2c2f3a;
+    text-align: center;
     font-weight: 500;
     font-size: 18px;
     margin-bottom: 4px;
-    padding: 12px 24px 0 24px;
+    padding: 6px;
 }
 
 .users {
     list-style-type: none;
     font-weight: 300;
-    padding: 12px 24px 0 24px;
+}
+
+.users li {
+    padding: 4px;
+}
+
+.users li:nth-of-type(even) {
+    background-color: #4e4e4e;
 }
 
 .leaveBtn {
     background: rgb(134, 0, 0);
     color: white;
     width: 100%;
+    margin-top: auto;
 }
 
 .leaveBtn:hover{
     background: rgb(126, 0, 0);
+}
+
+@media only screen and (max-width: 450px){
+    .chat__sidebar{
+        width: 40%;
+    }
+}
+
+@media only screen and (max-width: 650px) and (min-width: 451px){
+    .chat__sidebar{
+        width: 30%;
+    }
+}
+
+@media only screen and (max-width: 1350px) and (min-width: 651px){
+    .chat__sidebar{
+        width: 25%;
+    }
+}
+
+@media only screen and (min-width: 1351px){
+    .chat__sidebar{
+        width: 20%;
+    }
 }

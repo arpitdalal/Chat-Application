@@ -6,11 +6,12 @@ const $txtInput = $form.querySelector('input')
 const $submitBtn = $form.querySelector('button')
 const $locationBtn = document.querySelector('#sendLocation')
 const $msg = document.querySelector('#messages')
-const $leaveBtn = document.querySelector('#leaveBtn')
+const $sidebar = document.querySelector('#sidebar')
 
 // Templates
 const msgTemplate = document.querySelector('#message-template').innerHTML
 const urlTemplate = document.querySelector('#url-template').innerHTML
+const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML
 
 // Options
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
@@ -56,6 +57,14 @@ socket.on('locationMsg', (url) => {
         })
         $msg.insertAdjacentHTML('beforeend', html)
     }
+})
+
+socket.on('roomData', ({ room, users }) => {
+    const html = Mustache.render(sidebarTemplate, {
+        room,
+        users
+    })
+    $sidebar.innerHTML = html
 })
 
 socket.on('disconnect', function () {
@@ -108,6 +117,9 @@ $locationBtn.addEventListener('click', () => {
     })
 })
 
-$leaveBtn.addEventListener('click', () => {
-    socket.disconnect()
+window.addEventListener('load', () => {
+    // not defining leaveBtn top as it wasn't populated before the call to roomData socket
+    document.querySelector('#leaveBtn').addEventListener('click', () => {
+        socket.disconnect()
+    })
 })
