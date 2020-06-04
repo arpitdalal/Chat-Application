@@ -69,8 +69,15 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/chat.js"></script>
     <script>
-        document.querySelector('.me').parentElement.classList.add('messages-me')
-        document.querySelector('.Admin').parentElement.classList.add('messages-Admin')
+        const $me = document.querySelector('.me') 
+        const $admin = document.querySelector('.Admin')
+        
+        if($me){
+            $me.parentElement.classList.add('messages-me')
+        }
+        if($admin){
+            $admin.parentElement.classList.add('messages-Admin')
+        }
     </script>
 </body>
 </html>
