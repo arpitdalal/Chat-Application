@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,19 +8,21 @@
     <link rel="icon" href="img/favicon.png">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
     <div class="chat">
         <div class="chat__sidebar">
             <div id="sidebar"></div>
             <button id="leaveBtn" class="leaveBtn">Leave chat room</button>
         </div>
-        
+
         <div class="chat__main">
             <div id="messages" class="chat__messages"></div>
 
             <div class="compose">
                 <form id="chatForm">
-                    <input type="text" name="userMsg" placeholder="your message..." autofocus required autocomplete="off">
+                    <input type="text" name="userMsg" placeholder="your message..." autofocus required
+                        autocomplete="off">
                     <button id="sendBtn">Send</button>
                 </form>
                 <button id="sendLocation">Share location</button>
@@ -36,7 +39,7 @@
             <p>{{msg}}</p>
         </div>
     </script>
-    
+
     <script id="messageAdmin-template" type="text/html">
         <div class="message {{className}}">
             <p>{{msg}}</p>
@@ -57,9 +60,10 @@
         <h2 class="room-title">{{room}}</h2>
         <h3 class="list-title">Users</h3>
         <ul class="users">
-            {{#users}}
+            <li>{{currentUsername}} (Me)</li>
+            {{#filteredUsers}}
                 <li>{{username}}</li>
-            {{/users}}
+            {{/filteredUsers}}
         </ul>
     </script>
 
@@ -69,15 +73,16 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/chat.js"></script>
     <script>
-        const $me = document.querySelector('.me') 
+        const $me = document.querySelector('.me')
         const $admin = document.querySelector('.Admin')
-        
-        if($me){
+
+        if ($me) {
             $me.parentElement.classList.add('messages-me')
         }
-        if($admin){
+        if ($admin) {
             $admin.parentElement.classList.add('messages-Admin')
         }
     </script>
 </body>
+
 </html>

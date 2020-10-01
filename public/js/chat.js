@@ -18,142 +18,150 @@ const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML;
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true });
 
 const autoScroll = () => {
-	// New message element
-	const $newMsg = $msg.lastElementChild;
+  // New message element
+  const $newMsg = $msg.lastElementChild;
 
-	// Height of the new message
-	const newMsgStyles = getComputedStyle($newMsg);
-	const newMsgMargin = parseInt(newMsgStyles.marginBottom);
-	const newMsgHeight = $newMsg.offsetHeight + newMsgMargin;
+  // Height of the new message
+  const newMsgStyles = getComputedStyle($newMsg);
+  const newMsgMargin = parseInt(newMsgStyles.marginBottom);
+  const newMsgHeight = $newMsg.offsetHeight + newMsgMargin;
 
-	// Visible height
-	const visibleHeight = $msg.offsetHeight;
+  // Visible height
+  const visibleHeight = $msg.offsetHeight;
 
-	// Height of messages container
-	const containertHeight = $msg.scrollHeight;
+  // Height of messages container
+  const containertHeight = $msg.scrollHeight;
 
-	// How far have user scrolled
-	const scrollOffset = $msg.scrollTop + visibleHeight;
+  // How far have user scrolled
+  const scrollOffset = $msg.scrollTop + visibleHeight;
 
-	if (containertHeight - newMsgHeight <= scrollOffset + 1) {
-		$msg.scrollTop = $msg.scrollHeight;
-	}
+  if (containertHeight - newMsgHeight <= scrollOffset + 1) {
+    $msg.scrollTop = $msg.scrollHeight;
+  }
 };
 
 socket.emit('join', { username, room }, (error) => {
-	if (error) {
-		alert(error);
-		location.href = '/';
-	}
+  if (error) {
+    alert(error);
+    location.href = '/';
+  }
 });
 
 socket.on('msg', (msg) => {
-	if (msg.username === username.trim().toLowerCase()) {
-		const html = Mustache.render(msgTemplate, {
-			username: 'Me',
-			msg: msg.text,
-			createdAt: moment(msg.createdAt).format('h:mm a'),
-			className: 'me'
-		});
-		$msg.insertAdjacentHTML('beforeend', html);
-		autoScroll();
-	} else if (msg.username === 'Admin') {
-		const html = Mustache.render(adminMsgTemplate, {
-			msg: msg.text,
-			className: 'Admin'
-		});
-		$msg.insertAdjacentHTML('beforeend', html);
-		autoScroll();
-	} else {
-		const html = Mustache.render(msgTemplate, {
-			username: msg.username,
-			msg: msg.text,
-			createdAt: moment(msg.createdAt).format('h:mm a'),
-			className: msg.username
-		});
-		$msg.insertAdjacentHTML('beforeend', html);
-		autoScroll();
-	}
+  if (msg.username === username.trim().toLowerCase()) {
+    const html = Mustache.render(msgTemplate, {
+      username: 'Me',
+      msg: msg.text,
+      createdAt: moment(msg.createdAt).format('h:mm a'),
+      className: 'me'
+    });
+    $msg.insertAdjacentHTML('beforeend', html);
+    autoScroll();
+  } else if (msg.username === 'Admin') {
+    const html = Mustache.render(adminMsgTemplate, {
+      msg: msg.text,
+      className: 'Admin'
+    });
+    $msg.insertAdjacentHTML('beforeend', html);
+    autoScroll();
+  } else {
+    const html = Mustache.render(msgTemplate, {
+      username: msg.username,
+      msg: msg.text,
+      createdAt: moment(msg.createdAt).format('h:mm a'),
+      className: msg.username
+    });
+    $msg.insertAdjacentHTML('beforeend', html);
+    autoScroll();
+  }
 });
 
 socket.on('locationMsg', (url) => {
-	if (url.username === username.trim().toLowerCase()) {
-		const html = Mustache.render(urlTemplate, {
-			username: 'Me',
-			url: url.link,
-			createdAt: moment(url.createdAt).format('h:mm a'),
-			className: 'me'
-		});
-		$msg.insertAdjacentHTML('beforeend', html);
-		autoScroll();
-	} else {
-		const html = Mustache.render(urlTemplate, {
-			username: url.username,
-			url: url.link,
-			createdAt: moment(url.createdAt).format('h:mm a'),
-			className: url.username
-		});
-		$msg.insertAdjacentHTML('beforeend', html);
-		autoScroll();
-	}
+  if (url.username === username.trim().toLowerCase()) {
+    const html = Mustache.render(urlTemplate, {
+      username: 'Me',
+      url: url.link,
+      createdAt: moment(url.createdAt).format('h:mm a'),
+      className: 'me'
+    });
+    $msg.insertAdjacentHTML('beforeend', html);
+    autoScroll();
+  } else {
+    const html = Mustache.render(urlTemplate, {
+      username: url.username,
+      url: url.link,
+      createdAt: moment(url.createdAt).format('h:mm a'),
+      className: url.username
+    });
+    $msg.insertAdjacentHTML('beforeend', html);
+    autoScroll();
+  }
 });
 
 socket.on('roomData', ({ room, users }) => {
-	const html = Mustache.render(sidebarTemplate, {
-		room,
-		users
-	});
-	$sidebar.innerHTML = html;
-	autoScroll();
+  const currentUsername = username.trim().toLowerCase();
+  const filteredUsers = users.filter(function(value, index, arr) {
+    return value.username !== currentUsername;
+  });
+  console.log(filteredUsers);
+  console.log(currentUsername);
+
+  const html = Mustache.render(sidebarTemplate, {
+    room,
+    filteredUsers,
+    currentUsername
+  });
+  $sidebar.innerHTML = html;
+  autoScroll();
 });
 
 socket.on('disconnect', function() {
-	window.location = '/';
+  window.location = '/';
 });
 
 $form.addEventListener('submit', (e) => {
-	e.preventDefault();
+  e.preventDefault();
 
-	// disable the submit button
-	$submitBtn.setAttribute('disabled', 'disabled');
+  // disable the submit button
+  $submitBtn.setAttribute('disabled', 'disabled');
 
-	const userMsg = e.target.elements.userMsg.value;
-	socket.emit('sendMsg', userMsg, (error) => {
-		// enable the submit button and clear and focus the textbox
-		$submitBtn.removeAttribute('disabled');
-		$txtInput.value = '';
-		$txtInput.focus();
+  const userMsg = e.target.elements.userMsg.value;
+  socket.emit('sendMsg', userMsg, (error) => {
+    // enable the submit button and clear and focus the textbox
+    $submitBtn.removeAttribute('disabled');
+    $txtInput.value = '';
+    $txtInput.focus();
 
-		if (error) {
-			return alert(error);
-		}
-	});
+    if (error) {
+      return alert(error);
+    }
+  });
 });
 
 $locationBtn.addEventListener('click', () => {
-	if (!navigator.geolocation) {
-		return alert('Your browser do not support geolocation!');
-	}
+  if (!navigator.geolocation) {
+    return alert('Your browser do not support geolocation!');
+  }
 
-	// disable location button and focus the textbox
-	$locationBtn.setAttribute('disabled', 'disabled');
-	$txtInput.focus();
+  // disable location button and focus the textbox
+  $locationBtn.setAttribute('disabled', 'disabled');
+  $txtInput.focus();
 
-	navigator.geolocation.getCurrentPosition((position) => {
-		socket.emit(
-			'sendLocation',
-			{
-				lat: position.coords.latitude,
-				long: position.coords.longitude
-			},
-			() => {
-				// enable location button
-				$locationBtn.removeAttribute('disabled');
-			}
-		);
-	});
+  navigator.geolocation.getCurrentPosition((position) => {
+    socket.emit(
+      'sendLocation',
+      {
+        lat: position.coords.latitude,
+        long: position.coords.longitude
+      },
+      () => {
+        // enable location button
+        $locationBtn.removeAttribute('disabled');
+      }
+    );
+  });
 });
 
 document.querySelector('#leaveBtn').addEventListener('click', () => {
-	socket.disconnect();
+  socket.disconnect();
 });
